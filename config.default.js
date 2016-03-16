@@ -11,7 +11,7 @@ if (typeof process.env.MONGODB_PORT === 'string') {
 
 // Accesing Bluemix variable to get MongoDB info
 if (process.env.VCAP_SERVICES) {
-  var dbLabel = 'mongodb-2.4';
+  var dbLabel = 'mongodb-3.0.7-lite';
   var env = JSON.parse(process.env.VCAP_SERVICES);
   if (env[dbLabel]) {
     mongo = env[dbLabel][0].credentials;
@@ -27,10 +27,11 @@ if (process.env.VCAP_SERVICES) {
     username: 'admin',
   };
 }
-
+console.log(mongo);
+console.log(mongo.hostname);
 module.exports = {
   mongodb: {
-    server: process.env.ME_CONFIG_MONGODB_SERVER  || mongo.host,
+    server: process.env.ME_CONFIG_MONGODB_SERVER  || mongo.hostname,
     port:   process.env.ME_CONFIG_MONGODB_PORT    || mongo.port,
 
     //useSSL: connect to the server using secure SSL
@@ -55,7 +56,7 @@ module.exports = {
        * Add as many databases as you want!
        */
        {
-         database: process.env.ME_CONFIG_MONGODB_AUTH_DATABASE || mongo.db,
+         database: process.env.ME_CONFIG_MONGODB_AUTH_DATABASE || mongo.dbname,
          username: process.env.ME_CONFIG_MONGODB_AUTH_USERNAME || mongo.username,
          password: process.env.ME_CONFIG_MONGODB_AUTH_PASSWORD || mongo.password,
        },
